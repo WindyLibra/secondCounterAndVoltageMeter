@@ -113,11 +113,13 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  //HAL_TIM_Base_Start_IT(&htim2);
-  //HAL_TIM_Base_Start(&htim3);
+  HAL_TIM_Base_Start_IT(&htim2);
+  HAL_TIM_Base_Stop_IT(&htim2);
+  HAL_TIM_Base_Start(&htim3);
+  //HAL_TIM_Base_Stop(&htim3);
 
   HAL_ADCEx_Calibration_Start(&hadc1);
-  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&adc_buf, 1);
+  //HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&adc_buf, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -129,21 +131,22 @@ int main(void)
 		  CDC_Transmit_FS((uint8_t*)"Started\n", sizeof("Started\n"));
 		  HAL_TIM_Base_Start_IT(&htim2);
 		  memset(command, 0, sizeof(command));
-	  } else if(strncmp(command, stopCom, sizeof(startCom)) == 0){
+	  } else if(strncmp(command, stopCom, sizeof(stopCom)) == 0){
 		  CDC_Transmit_FS((uint8_t*)"Stopped\n", sizeof("Stopped\n"));
 		  HAL_TIM_Base_Stop_IT(&htim2);
 		  memset(command, 0, sizeof(command));
 	  }
+
 
 	  if(strncmp(command, adcStartCom, sizeof(adcStartCom)) == 0){
 		  CDC_Transmit_FS((uint8_t*)"Adc Started\n", sizeof("Adc Started\n"));
 		  HAL_TIM_Base_Start(&htim3);
 		  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&adc_buf, 1);
 		  memset(command, 0, sizeof(command));
-	  } else if(strncmp(command, adcStopCom, sizeof(adcStartCom)) == 0){
+	  } else if(strncmp(command, adcStopCom, sizeof(adcStopCom)) == 0){
 		  CDC_Transmit_FS((uint8_t*)"Adc Stopped\n", sizeof("Adc Stopped\n"));
-		  HAL_TIM_Base_Stop(&htim3);
 		  HAL_ADC_Stop_DMA(&hadc1);
+		  HAL_TIM_Base_Stop(&htim3);
 		  memset(command, 0, sizeof(command));
 	  }
 
@@ -392,12 +395,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     if (htim->Instance == TIM2)
     {
         seconds++;
-        uint8_t result;
+        uint8_t result = USBD_OK;
         memcpy(message, command, strlen(command));
         int n = sprintf(message, "Seconds elapsed: %lu\n", seconds);
-        do{
+        //do{
         	result = CDC_Transmit_FS((uint8_t*)message, n);
-        } while(result != USBD_OK);
+        //} while(result != USBD_OK);
     }
 
     /*if (htim->Instance == TIM3)

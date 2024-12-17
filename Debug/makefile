@@ -38,34 +38,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := secondsCounterViaUsb
+BUILD_ARTIFACT_NAME := secondCounterAndVoltageMeter
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-secondsCounterViaUsb.elf \
+secondCounterAndVoltageMeter.elf \
 
 MAP_FILES += \
-secondsCounterViaUsb.map \
+secondCounterAndVoltageMeter.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-secondsCounterViaUsb.list \
+secondCounterAndVoltageMeter.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: secondsCounterViaUsb.elf secondary-outputs
+main-build: secondCounterAndVoltageMeter.elf secondary-outputs
 
 # Tool invocations
-secondsCounterViaUsb.elf secondsCounterViaUsb.map: $(OBJS) $(USER_OBJS) C:\Users\pasha\Desktop\secondsCounterViaUsb_adc\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "secondsCounterViaUsb.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\pasha\Desktop\secondsCounterViaUsb_adc\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="secondsCounterViaUsb.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+secondCounterAndVoltageMeter.elf secondCounterAndVoltageMeter.map: $(OBJS) $(USER_OBJS) C:\Users\Lenovo\STM32CubeIDE\workspace_1.16.1\secondCounterAndVoltageMeter\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "secondCounterAndVoltageMeter.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Lenovo\STM32CubeIDE\workspace_1.16.1\secondCounterAndVoltageMeter\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="secondCounterAndVoltageMeter.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -74,14 +74,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-secondsCounterViaUsb.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "secondsCounterViaUsb.list"
+secondCounterAndVoltageMeter.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "secondCounterAndVoltageMeter.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) default.size.stdout secondsCounterViaUsb.elf secondsCounterViaUsb.list secondsCounterViaUsb.map
+	-$(RM) default.size.stdout secondCounterAndVoltageMeter.elf secondCounterAndVoltageMeter.list secondCounterAndVoltageMeter.map
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
